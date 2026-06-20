@@ -38,96 +38,107 @@ const quizDatabase = {
     ]
 };
 
-let currentQuestions = []; // 현재 선택된 주제의 문제들
+let currentQuestions = []; 
 let currentQuizIndex = 0;
 let currentTopicName = "";
 
-// HTML 요소 가져오기
-const categoryBox = document.getElementById("category-box");
-const quizBox = document.getElementById("quiz-box");
-const topicBadge = document.getElementById("topic-badge");
-const questionEl = document.getElementById("question");
-const optionsContainer = document.getElementById("options");
-const nextBtn = document.getElementById("next-btn");
-const resultBox = document.getElementById("result-box");
-const feedbackEl = document.getElementById("feedback");
+// 페이지 로드가 완료되면 실행되도록 안전하게 감싸줍니다.
+document.addEventListener("DOMContentLoaded", () => {
+    const categoryBox = document.getElementById("category-box");
+    const quizBox = document.getElementById("quiz-box");
+    const topicBadge = document.getElementById("topic-badge");
+    const questionEl = document.getElementById("question");
+    const optionsContainer = document.getElementById("options");
+    const nextBtn = document.getElementById("next-btn");
+    const resultBox = document.getElementById("result-box");
+    const feedbackEl = document.getElementById("feedback");
+    const homeBtn = document.getElementById("home-btn");
 
-// 🚀 퀴즈 시작 (카테고리 선택 시 호출됨)
-function startQuiz(category) {
-    currentQuestions = quizDatabase[category];
-    currentQuizIndex = 0;
-    
-    // 배지 텍스트 설정
-    if(category === 'grammar') currentTopicName = "📝 기초 문법";
-    else if(category === 'voca') currentTopicName = "🔤 필수 어휘";
-    else if(category === 'dialogue') currentTopicName = "💬 생활 회화";
-
-    // 화면 전환
-    categoryBox.classList.add("hidden");
-    quizBox.classList.remove("hidden");
-
-    loadQuiz();
-}
-
-// 퀴즈 로드
-function loadQuiz() {
-    resetState();
-
-    if (currentQuizIndex >= currentQuestions.length) {
-        questionEl.innerText = "🎉 해당 주제의 모든 문제를 풀었습니다! 🎉";
-        feedbackEl.innerText = "참 잘했어요! 다른 주제도 도전해 볼까요?";
-        feedbackEl.style.color = "#1e293b";
-        resultBox.classList.remove("hidden");
-        return;
-    }
-
-    topicBadge.innerText = `${currentTopicName} (${currentQuizIndex + 1}/${currentQuestions.length})`;
-    
-    const currentQuizData = currentQuestions[currentQuizIndex];
-    questionEl.innerText = currentQuizData.question;
-
-    currentQuizData.options.forEach((option, index) => {
-        const button = document.createElement("button");
-        button.innerText = option;
-        button.classList.add("option-btn");
-        button.addEventListener("click", () => selectAnswer(index, button));
-        optionsContainer.appendChild(button);
+    // 1. 카테고리 버튼들에 클릭 이벤트 연결
+    const categoryButtons = document.querySelectorAll(".category-btn");
+    categoryButtons.forEach(button => {
+        button.addEventListener("click", (e) => {
+            const category = e.target.getAttribute("data-category");
+            startQuiz(category);
+        });
     });
-}
 
-function resetState() {
-    nextBtn.classList.add("hidden");
-    resultBox.classList.add("hidden");
-    optionsContainer.innerHTML = "";
-}
+    // 2. 홈으로 가기 버튼 이벤트 연결
+    homeBtn.addEventListener("click", () => {
+        quizBox.classList.add("hidden");
+        categoryBox.classList.remove("hidden");
+    });
 
-function selectAnswer(selectedIndex, selectedButton) {
-    const correctIndex = currentQuestions[currentQuizIndex].correct;
-    const allButtons = optionsContainer.querySelectorAll(".option-btn");
+    // 3. 다음 문제 버튼 이벤트 연결
+    nextBtn.addEventListener("click", () => {
+        currentQuizIndex++;
+        loadQuiz();
+    });
 
-    if (selectedIndex === correctIndex) {
-        selectedButton.classList.add("correct");
-        feedbackEl.innerText = currentQuestions[currentQuizIndex].feedback;
-        feedbackEl.style.color = "#15803d";
-    } else {
-        selectedButton.classList.add("wrong");
-        allButtons[correctIndex].classList.add("correct");
-        feedbackEl.innerText = "❌ 아쉬워요! 정답을 다시 한 번 확인해 보세요.";
-        feedbackEl.style.color = "#b91c1c";
+    // 퀴즈 시작 함수
+    function startQuiz(category) {
+        currentQuestions = quizDatabase[category];
+        currentQuizIndex = 0;
+        
+        if (category === 'grammar') currentTopicName = "📝 기초 문법";
+        else if (category === 'voca') currentTopicName = "🔤 필수 어휘";
+        else if (category === 'dialogue') currentTopicName = "💬 생활 회화";
+
+        categoryBox.classList.add("hidden");
+        quizBox.classList.remove("hidden");
+
+        loadQuiz();
     }
 
-    allButtons.forEach(btn => btn.disabled = true);
-    resultBox.classList.remove("hidden");
-    nextBtn.classList.remove("hidden");
-}
+    // 퀴즈 로드 함수
+    function loadQuiz() {
+        resetState();
 
-nextBtn.addEventListener("click", () => {
-    currentQuizIndex++;
-    loadQuiz();
+        if (currentQuizIndex >= currentQuestions.length) {
+            questionEl.innerText = "🎉 해당 주제의 모든 문제를 풀었습니다! 🎉";
+            feedbackEl.innerText = "참 잘했어요! 다른 주제도 도전해 볼까요?";
+            feedbackEl.style.color = "#1e293b";
+            resultBox.classList.remove("hidden");
+            return;
+        }
+
+        topicBadge.innerText = `${currentTopicName} (${currentQuizIndex + 1}/${currentQuestions.length})`;
+        
+        const currentQuizData = currentQuestions[currentQuizIndex];
+        questionEl.innerText = currentQuizData.question;
+
+        currentQuizData.options.forEach((option, index) => {
+            const button = document.createElement("button");
+            button.innerText = option;
+            button.classList.add("option-btn");
+            button.addEventListener("click", () => selectAnswer(index, button));
+            optionsContainer.appendChild(button);
+        });
+    }
+
+    function resetState() {
+        nextBtn.classList.add("hidden");
+        resultBox.classList.add("hidden");
+        optionsContainer.innerHTML = "";
+    }
+
+    function selectAnswer(selectedIndex, selectedButton) {
+        const correctIndex = currentQuestions[currentQuizIndex].correct;
+        const allButtons = optionsContainer.querySelectorAll(".option-btn");
+
+        if (selectedIndex === correctIndex) {
+            selectedButton.classList.add("correct");
+            feedbackEl.innerText = currentQuestions[currentQuizIndex].feedback;
+            feedbackEl.style.color = "#15803d";
+        } else {
+            selectedButton.classList.add("wrong");
+            allButtons[correctIndex].classList.add("correct");
+            feedbackEl.innerText = "❌ 아쉬워요! 정답을 다시 한 번 확인해 보세요.";
+            feedbackEl.style.color = "#b91c1c";
+        }
+
+        allButtons.forEach(btn => btn.disabled = true);
+        resultBox.classList.remove("hidden");
+        nextBtn.classList.remove("hidden");
+    }
 });
-
-// 🏠 처음 화면(주제 선택)으로 돌아가기
-function goHome() {
-    quizBox.classList.add("hidden");
-    categoryBox.classList.remove("hidden");
-}
