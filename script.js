@@ -1,51 +1,91 @@
-// 퀴즈 데이터 배열 (선생님께서 원하는 문제로 자유롭게 변경 가능합니다!)
-const quizData = [
-    {
-        question: "Q1. 빈칸에 들어갈 알맞은 단어는?\n\n'She _______ a cute dog.'",
-        options: ["have", "has", "is", "are"],
-        correct: 1, // "has"의 인덱스 번호 (0부터 시작)
-        feedback: "🎈 정답입니다! 주어가 3인칭 단수(She)일 때는 has를 사용해요."
-    },
-    {
-        question: "Q2. 다음 대화의 빈칸에 알맞은 말은?\n\nA: Thank you for your help.\nB: _______________________",
-        options: ["You're welcome.", "I'm sorry.", "Nice to meet you.", "Goodbye."],
-        correct: 0, // "You're welcome."의 인덱스 번호
-        feedback: "🎈 정답입니다! 감사의 인사에 대한 답변은 '천만에요(You're welcome)'가 자연스러워요."
-    },
-    {
-        question: "Q3. 우리말 뜻과 일치하도록 빈칸에 알맞은 단어는?\n\n'나는 일요일마다 축구를 한다.'\n-> I play soccer _______ Sundays.",
-        options: ["at", "in", "on", "to"],
-        correct: 2, // "on"의 인덱스 번호
-        feedback: "🎈 정답입니다! 요일 앞에는 전치사 on을 사용합니다."
-    }
-];
+// 💡 주제별 퀴즈 데이터 저장소
+const quizDatabase = {
+    grammar: [
+        {
+            question: "빈칸에 들어갈 be동사로 알맞은 것은?\n\n'Tom and I _______ good friends.'",
+            options: ["am", "is", "are", "be"],
+            correct: 2,
+            feedback: "🎈 정답! 주어가 'Tom and I'로 여러 명(복수)이기 때문에 are를 씁니다."
+        },
+        {
+            question: "다음 중 일반동사의 과거형이 '잘못' 연결된 것은?",
+            options: ["go - went", "make - maked", "play - played", "run - ran"],
+            correct: 1,
+            feedback: "🎈 정답! make의 과거형은 불규칙 변화로 'made'가 올바른 형태입니다."
+        }
+    ],
+    voca: [
+        {
+            question: "다음 영단어의 뜻으로 올바른 것을 고르세요.\n\n'environment'",
+            options: ["정부", "경험", "발명", "환경"],
+            correct: 3,
+            feedback: "🎈 정답! environment는 '환경'이라는 뜻의 중요 단어입니다."
+        },
+        {
+            question: "밑줄 친 단어의 반대말로 알맞은 것은?\n\n'The room is very hot.'",
+            options: ["warm", "cold", "dirty", "dark"],
+            correct: 1,
+            feedback: "🎈 정답! hot(더운)의 반대말은 cold(추운)입니다."
+        }
+    ],
+    dialogue: [
+        {
+            question: "길을 물어볼 때 대화를 시작하는 말로 가장 알맞은 것은?",
+            options: ["Excuse me.", "Congratulations!", "Never mind.", "What's up?"],
+            correct: 0,
+            feedback: "🎈 정답! 모르는 사람에게 말을 걸거나 길을 물어볼 땐 'Excuse me'로 시작해요."
+        }
+    ]
+};
 
-let currentQuiz = 0;
+let currentQuestions = []; // 현재 선택된 주제의 문제들
+let currentQuizIndex = 0;
+let currentTopicName = "";
 
+// HTML 요소 가져오기
+const categoryBox = document.getElementById("category-box");
+const quizBox = document.getElementById("quiz-box");
+const topicBadge = document.getElementById("topic-badge");
 const questionEl = document.getElementById("question");
 const optionsContainer = document.getElementById("options");
 const nextBtn = document.getElementById("next-btn");
 const resultBox = document.getElementById("result-box");
 const feedbackEl = document.getElementById("feedback");
 
-// 첫 퀴즈 로드
-loadQuiz();
+// 🚀 퀴즈 시작 (카테고리 선택 시 호출됨)
+function startQuiz(category) {
+    currentQuestions = quizDatabase[category];
+    currentQuizIndex = 0;
+    
+    // 배지 텍스트 설정
+    if(category === 'grammar') currentTopicName = "📝 기초 문법";
+    else if(category === 'voca') currentTopicName = "🔤 필수 어휘";
+    else if(category === 'dialogue') currentTopicName = "💬 생활 회화";
 
+    // 화면 전환
+    categoryBox.classList.add("hidden");
+    quizBox.classList.remove("hidden");
+
+    loadQuiz();
+}
+
+// 퀴즈 로드
 function loadQuiz() {
     resetState();
-    
-    // 마지막 문제까지 다 풀었을 때 처리
-    if (currentQuiz >= quizData.length) {
-        questionEl.innerText = "🎉 모든 퀴즈를 완료했습니다! 🎉";
-        feedbackEl.innerText = "오늘 수업도 힘차게 시작해 볼까요?";
+
+    if (currentQuizIndex >= currentQuestions.length) {
+        questionEl.innerText = "🎉 해당 주제의 모든 문제를 풀었습니다! 🎉";
+        feedbackEl.innerText = "참 잘했어요! 다른 주제도 도전해 볼까요?";
+        feedbackEl.style.color = "#1e293b";
         resultBox.classList.remove("hidden");
         return;
     }
 
-    const currentQuizData = quizData[currentQuiz];
+    topicBadge.innerText = `${currentTopicName} (${currentQuizIndex + 1}/${currentQuestions.length})`;
+    
+    const currentQuizData = currentQuestions[currentQuizIndex];
     questionEl.innerText = currentQuizData.question;
 
-    // 보기 버튼 동적 생성
     currentQuizData.options.forEach((option, index) => {
         const button = document.createElement("button");
         button.innerText = option;
@@ -55,41 +95,39 @@ function loadQuiz() {
     });
 }
 
-// 상태 초기화
 function resetState() {
     nextBtn.classList.add("hidden");
     resultBox.classList.add("hidden");
     optionsContainer.innerHTML = "";
 }
 
-// 사용자가 답을 선택했을 때
 function selectAnswer(selectedIndex, selectedButton) {
-    const correctIndex = quizData[currentQuiz].correct;
+    const correctIndex = currentQuestions[currentQuizIndex].correct;
     const allButtons = optionsContainer.querySelectorAll(".option-btn");
 
-    // 정답 여부 확인 및 색상 변경
     if (selectedIndex === correctIndex) {
         selectedButton.classList.add("correct");
-        feedbackEl.innerText = quizData[currentQuiz].feedback;
+        feedbackEl.innerText = currentQuestions[currentQuizIndex].feedback;
         feedbackEl.style.color = "#15803d";
     } else {
         selectedButton.classList.add("wrong");
-        // 오답일 때 정답 버튼도 함께 표시해 줌
         allButtons[correctIndex].classList.add("correct");
-        feedbackEl.innerText = "❌ 아쉬워요! 다시 한 번 생각해 보세요.";
+        feedbackEl.innerText = "❌ 아쉬워요! 정답을 다시 한 번 확인해 보세요.";
         feedbackEl.style.color = "#b91c1c";
     }
 
-    // 답을 고른 후에는 다른 버튼 클릭 금지
     allButtons.forEach(btn => btn.disabled = true);
-    
-    // 결과창과 다음 버튼 보여주기
     resultBox.classList.remove("hidden");
     nextBtn.classList.remove("hidden");
 }
 
-// 다음 문제 버튼 클릭 이벤트
 nextBtn.addEventListener("click", () => {
-    currentQuiz++;
+    currentQuizIndex++;
     loadQuiz();
 });
+
+// 🏠 처음 화면(주제 선택)으로 돌아가기
+function goHome() {
+    quizBox.classList.add("hidden");
+    categoryBox.classList.remove("hidden");
+}
