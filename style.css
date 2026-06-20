@@ -1,4 +1,3 @@
-/* 기본 배경 및 폰트 설정 */
 body {
     font-family: 'Malgun Gothic', sans-serif;
     background-color: #f0f4f8;
@@ -9,21 +8,26 @@ body {
     margin: 0;
 }
 
-/* 퀴즈 박스 전체 컨테이너 */
 .quiz-container {
     background-color: #ffffff;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
     width: 90%;
     max-width: 500px;
     text-align: center;
 }
 
 h1 {
-    color: #3b82f6;
-    margin-bottom: 20px;
+    color: #1e293b;
     font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: #64748b;
+    font-size: 15px;
+    margin-bottom: 20px;
 }
 
 hr {
@@ -33,82 +37,110 @@ hr {
     margin-bottom: 25px;
 }
 
-/* 문제 텍스트 스타일 */
+/* 퀴즈 상단 바 (주제 표시 및 홈 버튼) */
+.quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+#topic-badge {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#home-btn {
+    background: none;
+    border: 1px solid #cbd5e1;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #64748b;
+}
+
+#home-btn:hover {
+    background-color: #f1f5f9;
+}
+
+/* 카테고리 버튼 배열 */
+.category-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.category-btn {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 16px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.category-btn:hover {
+    background-color: #2563eb;
+    transform: translateY(-2px);
+}
+
+/* 문제창 및 보기 버튼 */
 .question-text {
     font-size: 20px;
     font-weight: bold;
     color: #1e293b;
     margin-bottom: 25px;
-    line-height: 1.4;
+    line-height: 1.5;
+    white-space: pre-line; /* 줄바꿈(\n) 적용 */
 }
 
-/* 보기 버튼 정렬 */
 .options-container {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin-bottom: 20px;
 }
 
-/* 보기 버튼 기본 스타일 */
 .option-btn {
     background-color: #f8fafc;
-    border: 2px solid #cbd5e1;
-    padding: 12px;
+    border: 2px solid #e2e8f0;
+    padding: 14px;
     font-size: 16px;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: all 0.2s ease;
     text-align: left;
     padding-left: 20px;
+    transition: all 0.2s;
 }
 
 .option-btn:hover {
-    background-color: #eff6ff;
-    border-color: #3b82f6;
+    background-color: #f1f5f9;
+    border-color: #94a3b8;
 }
 
-/* 정답 및 오답 스타일 */
-.correct {
-    background-color: #bbf7d0 !important;
-    border-color: #22c55e !important;
-    color: #14532d;
-    font-weight: bold;
-}
+.correct { background-color: #bbf7d0 !important; border-color: #22c55e !important; color: #14532d; font-weight: bold; }
+.wrong { background-color: #fecaca !important; border-color: #ef4444 !important; color: #7f1d1d; }
 
-.wrong {
-    background-color: #fecaca !important;
-    border-color: #ef4444 !important;
-    color: #7f1d1d;
-}
-
-/* 하단 버튼 및 결과창 */
 .btn {
-    background-color: #3b82f6;
+    background-color: #1e293b;
     color: white;
     border: none;
-    padding: 12px 25px;
+    padding: 14px;
     font-size: 16px;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     font-weight: bold;
     width: 100%;
-}
-
-.btn:hover {
-    background-color: #2563eb;
-}
-
-.result-text {
-    font-size: 18px;
-    font-weight: bold;
     margin-top: 15px;
-    margin-bottom: 15px;
-    padding: 10px;
-    border-radius: 8px;
 }
 
-/* 화면 숨김 처리용 클래스 */
-.hidden {
-    display: none;
-}
+.btn:hover { background-color: #0f172a; }
+.result-text { font-size: 16px; font-weight: bold; margin-top: 20px; padding: 12px; border-radius: 10px; }
+.hidden { display: none !important; }
