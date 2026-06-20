@@ -37,7 +37,6 @@ hr {
     margin-bottom: 25px;
 }
 
-/* 퀴즈 상단 바 (주제 표시 및 홈 버튼) */
 .quiz-header {
     display: flex;
     justify-content: space-between;
@@ -68,7 +67,6 @@ hr {
     background-color: #f1f5f9;
 }
 
-/* 카테고리 버튼 배열 */
 .category-buttons {
     display: flex;
     flex-direction: column;
@@ -92,14 +90,13 @@ hr {
     transform: translateY(-2px);
 }
 
-/* 문제창 및 보기 버튼 */
 .question-text {
     font-size: 20px;
     font-weight: bold;
     color: #1e293b;
     margin-bottom: 25px;
     line-height: 1.5;
-    white-space: pre-line; /* 줄바꿈(\n) 적용 */
+    white-space: pre-line;
 }
 
 .options-container {
@@ -143,4 +140,6 @@ hr {
 
 .btn:hover { background-color: #0f172a; }
 .result-text { font-size: 16px; font-weight: bold; margin-top: 20px; padding: 12px; border-radius: 10px; }
+
+/* ⚠️ 제일 중요: display 설정을 강제하여 확실히 숨기고 보여줍니다 */
 .hidden { display: none !important; }
