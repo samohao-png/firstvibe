@@ -3,26 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ 1분 영어 퀴즈 ⚡</title>
+    <title>⚡ 중1 영어 주제별 퀴즈 ⚡</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="quiz-container">
-        <h1>📝 오늘의 영어 퀴즈</h1>
-        <hr>
-        
-        <div id="quiz-box">
+        <!-- 1화면: 주제 선택 카테고리 -->
+        <div id="category-box">
+            <h1>🎒 오늘의 영어 퀴즈 주제는?</h1>
+            <p class="subtitle">도전할 분야를 선택하세요!</p>
+            <hr>
+            <div class="category-buttons">
+                <button class="category-btn" onclick="startQuiz('grammar')">📝 기초 문법 (Grammar)</button>
+                <button class="category-btn" onclick="startQuiz('voca')">🔤 필수 어휘 (Vocabulary)</button>
+                <button class="category-btn" onclick="startQuiz('dialogue')">💬 생활 회화 (Dialogue)</button>
+            </div>
+        </div>
+
+        <!-- 2화면: 실제 퀴즈 화면 (처음에는 숨겨짐) -->
+        <div id="quiz-box" class="hidden">
+            <div class="quiz-header">
+                <span id="topic-badge">주제</span>
+                <button id="home-btn" onclick="goHome()">🏠 처음으로</button>
+            </div>
+            <hr>
             <div id="question" class="question-text">문제가 여기에 나타납니다.</div>
-            <div id="options" class="options-container">
-                </div>
+            <div id="options" class="options-container"></div>
+            
+            <div id="result-box" class="result-text hidden">
+                <p id="feedback"></p>
+            </div>
+            <button id="next-btn" class="btn hidden">다음 문제 ➡️</button>
         </div>
-
-        <div id="result-box" class="result-text hidden">
-            <p id="feedback"></p>
-        </div>
-
-        <button id="next-btn" class="btn hidden">다음 문제 ➡️</button>
     </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
 
     <script src="script.js"></script>
 </body>
